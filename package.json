@@ -1,0 +1,26 @@
+{
+  "name": "webpack-starter",
+  "version": "1.0.0",
+  "description": "Webpack starter with pre-configured loaders, plugins, and build scripts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack serve --config webpack.dev.js",
+    "deploy": "git subtree push --prefix dist origin gh-pages"    
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iiTzAki/webpack-starter.git"
+  },
+  "keywords": [],
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/iiTzAki/webpack-starter/issues"
+  },
+  "homepage": "https://github.com/iiTzAki/webpack-starter#readme",
+  "devDependencies": {
+    "webpack": "^5.111.1",
+    "webpack-cli": "^7.2.3"
+  }
+}
