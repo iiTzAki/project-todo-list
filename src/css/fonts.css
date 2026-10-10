@@ -1,0 +1,17 @@
+@font-face {
+    font-family: "Space Grotesk";
+    src: url(../assets/fonts/Space-Grotesk-Variable.woff2) format('woff2');
+    font-weight: 100 900;
+}
+
+@font-face {
+    font-family: "Sora";
+    src: url(../assets/fonts/Sora-Variable.woff2) format('woff2');
+    font-weight: 100 900;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url(../assets/fonts/Inter-Variable.woff2) format('woff2');
+    font-weight: 100 900;
+}
