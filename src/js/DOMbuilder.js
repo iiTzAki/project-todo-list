@@ -1,17 +1,23 @@
 import {getProjectStorage, findTodos} from "./storage.js";
 
-function createProjectElement(projectName) { 
+function createProjectElement(projectName, projectId) { 
 
     const getProjectsContainer = document.getElementById("my-projects-container");
-    const newProjectBtn = document.createElement('button'); 
-    newProjectBtn.className = "project-btn"
-    newProjectBtn.textContent = projectName; 
 
-    getProjectsContainer.appendChild(newProjectBtn); 
+    const projectWrapper = document.createElement("div"); 
+    const newProjectBtn = document.createElement("button");
+    const removeProjectBtn = document.createElement("button"); 
+    removeProjectBtn.textContent = "X";  
+    removeProjectBtn.className = "remove-project-btn";
+    removeProjectBtn.setAttribute("data-project-id", projectId)
+    newProjectBtn.className = "project-btn"; 
+    newProjectBtn.textContent = projectName; 
+    projectWrapper.append(newProjectBtn, removeProjectBtn);
+    getProjectsContainer.appendChild(projectWrapper)  
 
 };
 
-function createTodoElement(title, notes, dueDate, priority) { 
+function createTodoElement(title, notes, dueDate, priority, todoId) { 
 
     const getTodosContainer = document.getElementById("my-todos-container");
     const newTodoWrapper = document.createElement("div"); 
@@ -19,29 +25,28 @@ function createTodoElement(title, notes, dueDate, priority) {
     const todoPara = document.createElement('p');
     const todoDueDate = document.createElement('p'); 
     const todoPriority = document.createElement('p');
+    const removeBtn = document.createElement('button'); 
+
 
     todoHeading.textContent = title;
     todoPara.textContent = notes;
     todoDueDate.textContent = dueDate;
     todoPriority.textContent = priority;  
-    newTodoWrapper.append(todoHeading, todoPara, todoDueDate, todoPriority);
+    removeBtn.textContent = "Delete"; 
+    removeBtn.className = "todo-remove-btn"; 
+    removeBtn.setAttribute("data-todo-id", todoId)
+    newTodoWrapper.append(todoHeading, todoPara, todoDueDate, todoPriority, removeBtn);
     getTodosContainer.appendChild(newTodoWrapper); 
-
 
 };
 
 function renderProjectElements() { 
 
-    const getProjectsContainer = document.getElementById("my-projects-container");
     const getProjects = getProjectStorage(); 
-
     if (getProjects === null) return;
 
     getProjects.forEach(project => {
-        const newProjectBtn = document.createElement("button"); 
-        newProjectBtn.className = "project-btn"; 
-        newProjectBtn.textContent = project.projectTitle; 
-        getProjectsContainer.appendChild(newProjectBtn);
+        createProjectElement(project.projectTitle, project.projectId)
     });
 
 }
@@ -52,15 +57,37 @@ function renderTodoElements(projectTitle) {
     if(!searchTodos) return;
 
     const todoData = searchTodos.todos; 
-    todoData.forEach(val => {
+    todoData.forEach(todo => {
         createTodoElement(
-            val.todoTitle,
-            val.todoNotes,
-            val.todoDueDate,
-            val.todoPriority
+            todo.todoTitle,
+            todo.todoNotes,
+            todo.todoDueDate,
+            todo.todoPriority,
+            todo.todoId
         );
     });
 
 };
 
-export { createProjectElement, createTodoElement, renderProjectElements, renderTodoElements }
+function renderAllTodoElements() { 
+    const getProjects = getProjectStorage(); 
+    if(!getProjects) return;
+    const allTodos = getProjects.flatMap(project => project.todos);  
+    allTodos.forEach(todo => {
+        createTodoElement(
+            todo.todoTitle,
+            todo.todoNotes,
+            todo.todoDueDate,
+            todo.todoPriority,
+            todo.todoId
+        );
+    });
+};
+
+export {
+    createProjectElement, 
+    createTodoElement, 
+    renderProjectElements, 
+    renderTodoElements, 
+    renderAllTodoElements
+}

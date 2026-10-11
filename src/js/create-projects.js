@@ -1,7 +1,7 @@
 import {saveProjects} from "./storage.js"
-import {createProjectElement} from "./DOMbuilder.js"
 
 class Project { 
+    projectId = crypto.randomUUID(); 
 
     constructor(title) { 
         this.title = title
@@ -12,8 +12,7 @@ class Project {
 function createProjects(projectTitle) { 
 
     const newProject = new Project(projectTitle)
-    saveProjects(newProject.title)
-    createProjectElement(newProject.title)
+    saveProjects(newProject.title, newProject.projectId)
 
 }
 
