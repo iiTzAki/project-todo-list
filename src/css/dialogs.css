@@ -1,0 +1,190 @@
+@import url(./vars.css);
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+dialog { 
+    background: #11001C;
+    padding: 3em;
+    border-radius: 16px;
+    margin: auto;
+    border: 1px solid rgba(193, 158, 224, 0.15); 
+    color: var(--text-heading);
+    animation: slideIn 0.4s ease-out forwards;
+}   
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+dialog h1 { 
+    font-family: var(--font-family-heading);
+}
+
+dialog p { 
+    color: var(--text-body);
+}
+
+.textarea-task-notes,
+dialog input { 
+    width: 100%;
+    margin-top: 4px;
+    border-radius: 7px;
+    border: 1px solid black;
+    padding: 10px;
+    outline: none;
+    font-size: 13px;
+    resize: none;
+}
+
+.textarea-task-notes { 
+    height: 100px;
+}
+
+dialog input::placeholder { 
+    color: #858788;
+}
+
+dialog label { 
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-family-heading);
+    width: 100%;
+}
+
+.dialog-content-container > .dialog-form {
+    margin-top: 30px; 
+    display: flex;
+    flex-direction: column;
+    gap: 1.1em;
+}
+
+.dialog-btn-container { 
+    margin-top: 20px;
+    margin-left: auto;
+    > .create-btn { 
+        color: var(--bg);
+        background: var(--accent);
+        margin-left: 5px;
+    }
+}
+
+.dialog-btn { 
+    width: max-content;
+    padding: 10px 30px;
+    border-radius: 7px;
+    font-size: .9rem;
+    cursor: pointer;
+    border: none;
+    color: currentColor;
+    background: hsl(from var(--accent) h s 20%);
+    transition: var(--default-transition) var(--ease-default);
+}
+
+.dialog-btn:hover { 
+    background: hsl(from var(--accent) h 20% 20%)
+}
+
+.create-btn:hover { 
+    transform: translateY(-3px);
+    background: hsl(from var(--accent) h s 40%);
+    color: currentColor;
+}
+
+/* Create Task Dialog */
+
+#create-task-dialog { 
+    max-width: 500px;
+    width: 100%;
+}
+
+#task-form > fieldset { 
+    padding: 1.3em;
+    border-radius: 10px;
+    border: 2px solid #FFFFFF;
+    font-weight: var(--font-weight-medium);
+    margin: auto;
+    width: 100%;
+    > legend { 
+        font-family: var(--font-family-heading);
+        padding: 7px;
+    }
+}
+
+.task-radio-tile-group { 
+    display: flex;
+    justify-content: space-around;
+}
+
+.task-input-container {
+    text-align: center; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 5.4rem;
+    height: 5.9rem;
+    position: relative;
+    margin: 0.6rem;
+    input { 
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        cursor: pointer;
+        z-index: 2;
+        margin: 0;
+        opacity: 0;
+    }
+    .task-radio-tile { 
+        height: 100%;
+        width: 100%;
+        color: #f4effa;
+        border: 1px solid #FFFFFF;
+        border-radius: 10px;
+        margin-bottom: 6px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        font-family: var(--font-family-base);
+        transition: all 300ms ease;     
+        > svg { 
+            margin: auto;
+            flex-shrink: 1;
+            fill: #f4effa;
+        }   
+    }
+}
+
+.task-input-container > input:hover + .task-radio-tile { 
+    box-shadow: 0px 0px 15px #cab3ee;
+}   
+
+.task-input-container > input:checked + .task-radio-tile svg,
+.task-input-container > input:checked + .task-radio-tile label { 
+    color: #FFFFFF;    
+    fill: #FFFFFF
+}
+
+.task-input-container > .low:checked + .task-radio-tile {
+    background-color: hsl(from var(--accent) h s 30%);
+    box-shadow: 0px 0px 15px #b298dc;
+} 
+.task-input-container > .medium:checked + .task-radio-tile {
+    background-color: hsl(from var(--accent) h s 40%);
+    box-shadow: 0px 0px 15px #b298dc;    
+} 
+.task-input-container > .high:checked + .task-radio-tile {
+    background-color: hsl(from var(--accent) h s 45%);
+    box-shadow: 0px 0px 15px #b298dc;
+} 

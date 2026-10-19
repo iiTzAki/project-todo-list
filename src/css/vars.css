@@ -1,0 +1,32 @@
+@import url(./fonts.css);
+
+:root { 
+    /* Colors */
+    --primary-clr: #815AC0; 
+    --bg: #121113; 
+    --accent: #C19EE0; 
+    
+    /* Text Colors */
+    --text-body: #E8E4F0;
+    --text-heading: #FFFFFF;  
+    --text-accent: #815AC0;  
+
+    /* Font Stacks */
+    --font-family-display: "Space Grotesk", "Avenir Next", "Helvetica Neue", sans-serif; 
+    --font-family-heading: "Sora", "Avenir", "Segoe UI", sans-serif; 
+    --font-family-base: "Inter", "Helvetica Neue", "Segoe UI", "Arial", sans-serif; 
+
+    /* Responsive Font Size */
+    --font-size-sm: clamp(0.8125rem, 0.8rem + 0.2vw, 1rem);
+    --font-size-base: clamp(1.125rem, 1.1rem + 0.3vw, 1.4375rem);
+    
+    /* Font Weights */
+    --font-weight-normal: 500;
+    --font-weight-medium: 600;
+    --font-weight-bold: 700;
+
+    /* Transitions */
+    --default-transition: 300ms;  
+    --ease-default: ease; 
+    --ease-smooth: ease-in-out; 
+}
