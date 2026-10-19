@@ -3,45 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Pulse</title>
 </head>
 <body>
-    <h1>Pulse</h1>
-    <h2 class="project-title"> 
-        Projects
-    </h2>
-    <hr>
-    <div>
-        <form action="">
-            <input type="text" name="" id="project-name" placeholder="Project Name">
-            <button class="project-submit-btn" type="submit">Create Project</button>
-        </form>
-    </div>    
-    <div>
-        <form action="">
-            <div>
-                <label for="todo-title">Project Title:</label>
-                <input type="text" name="project-title" id="todo-title" placeholder="Title"></div>
-            <div>
-                <label for="todo-notes">Project Notes:</label>
-                <input type="text" name="project-notes" id="todo-notes" placeholder="Notes"></div>
-            <div>
-                <label for="todo-due-date">Project Due Date:</label>
-                <input type="text" name="project-due-date" id="todo-due-date" placeholder="Due Date"></div>
-            <div>
-                <label for="todo-priority">Project Priority:</label>
-                <input type="text" name="project-priority" id="todo-priority" placeholder="Priority">
-            </div>
-            <button class="submit-form-btn" type="submit">Create</button>
-        </form>
-    </div>    
-    <hr>
-    <div>
-        <div class="content-sidebar">
-            <button class="all-tasks-btn">All Tasks</button>
-            <div id="my-projects-container"></div>
+
+    <div id="sidebar">
+        <div class="sidebar-brand">
+                <div class="brand-container">
+                    <div class="brand-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="#fff"><path d="M16.5,21C13.5,21 12.31,16.76 11.05,12.28C10.14,9.04 9,5 7.5,5C4.11,5 4,11.93 4,12H2C2,11.63 2.06,3 7.5,3C10.5,3 11.71,7.25 12.97,11.74C13.83,14.8 15,19 16.5,19C19.94,19 20.03,12.07 20.03,12H22.03C22.03,12.37 21.97,21 16.5,21Z" /></svg>
+                    </div>
+                    <span>Pulse</span>
+                </div>
+                <button id="sidebar-toggle-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
+                </button>
         </div>
-        <div id="my-todos-container"></div>
+
+        <ul>    
+                <h2 class="sidebar-text">Filters</h2>
+                <li>
+                    <button class="default-sidebar-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search preview-icon"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+                        <span class="sidebar-text">Search</span>
+                    </button>
+                </li>                
+                <li>
+                    <button class="default-sidebar-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-astroid preview-icon"><path d="M12.983 21.186a1 1 0 0 1-1.966 0 10 10 0 0 0-8.203-8.203 1 1 0 0 1 0-1.966 10 10 0 0 0 8.203-8.203 1 1 0 0 1 1.966 0 10 10 0 0 0 8.203 8.203 1 1 0 0 1 0 1.966 10 10 0 0 0-8.203 8.203"/></svg>
+                        <span class="sidebar-text">Today</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="default-sidebar-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days preview-icon"><path d="M8 2v3"/><path d="M16 2v3"/><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M8 13h.01"/><path d="M12 13h.01"/><path d="M16 13h.01"/><path d="M8 17h.01"/><path d="M12 17h.01"/><path d="M16 17h.01"/></svg>
+                        <span class="sidebar-text">Upcoming</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="default-sidebar-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers preview-icon"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>
+                        <span class="sidebar-text">Anytime</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="default-sidebar-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check preview-icon"><circle cx="12" cy="12" r="10"/><path d="m16 9-5.5 5.5L8 12"/></svg>
+                        <span class="sidebar-text">Completed</span>
+                    </button>
+                </li>                
+        </ul>
+
+        <ul>
+                <h2 class="sidebar-text">Workspace</h2>
+                <li>
+                    <button class="default-sidebar-btn" data-dialog="create-project-dialog">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                        <span class="sidebar-text">Add Project</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-btn default-sidebar-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid-circles preview-icon"><circle cx="17.5" cy="17.5" r="3.5"/><circle cx="17.5" cy="6.5" r="3.5"/><circle cx="6.5" cy="17.5" r="3.5"/><circle cx="6.5" cy="6.5" r="3.5"/></svg>
+                        <span class="sidebar-text">Projects</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/></svg>
+                    </button>
+                    <ul class="projects-sub-menu">
+                        <!-- Projects -->
+                        <div>
+                            <li class="project-action-buttons">
+                                <button class="project-btn">
+                                    <span class="project-text">My Day</span>
+                                </button>
+                                <button class="delete-project-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                                </button>
+                            </li>      
+                            
+                            
+                            <li class="project-action-buttons">
+                                <button class="project-btn">
+                                    <span class="project-text">My Day</span>
+                                </button>
+                                <button class="delete-project-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                                </button>
+                            </li>                              
+                        </div>
+                    </ul>
+                </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <h2>@iiTzAki</h2>
+            <p>© 2026 iiTzAki.</p>
+            <p>All rights reserved.</p>
+        </div>
+
     </div>
+
+    <div class="main-content">
+        
+        <div class="project-header">
+            <div class="project-container">
+                <div class="project-heading-wrapper">
+                    <h2>Pulse</h2>
+                    <h1>Your Tasks</h1>
+                    <p>Stay in rhythm.</p>
+                </div>
+                <div class="card-container">
+                    <div class="todo-filter-card filter-card">
+                        <span>To Do</span>
+                        <div class="filter-number"><p>0</p></div>
+                    </div>
+                    <div class="completed-filter-card filter-card">
+                        <span>Completed</span>
+                        <div class="filter-number"><p>0</p></div>
+                    </div>
+                    <div class="projects-filter-card filter-card">
+                        <span>Projects</span>
+                        <div class="filter-number"><p>0</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="datetime-container">
+                <div class="date">Thrusday, October 16</div>
+                <div class="time">12:00 AM</div>
+                <button class="add-todo-btn" data-dialog="create-task-dialog">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="task-panel">
+            <div class="task-header">
+                <h2>Tasks</h2>
+            </div>
+            <div class="task-list">
+                <div class="task-container">
+                    <div>
+                        <div class="task-details-wrapper">
+                            <div class="marker-input-container">
+                                <input type="checkbox" name="" id="">
+                                <div class="marker-radio-tile">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check preview-icon"><path d="M20 6 9 17l-5-5"/></svg>
+                                </div>
+                            </div>
+                            <div class="metadata-container">
+                                <h2 id="task-name">Clean Drawers</h2>
+                                <div>
+                                    <p id="task-due-date">Oct 12, 2026</p>                                    
+                                    <p id="task-priority">Medium</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-btn-container">
+                        <button class="action-btn edit-btn">Edit</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+                                  
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Dialogs -->
+    <dialog id="create-project-dialog">
+        <div class="dialog-content-container">
+            <div>
+                <h1>Create Project</h1>
+                <p>Project to Manage Todos.</p>
+            </div>
+            <form id="project-form" class="dialog-form" action="">
+                <div>
+                    <label for="">Project Name</label>
+                    <input type="text" placeholder="eg Clean Day">
+                </div>
+                <div class="dialog-btn-container">
+                    <button class="close-project-dialog dialog-btn" data-close="create-project-dialog">Cancel</button>
+                    <button type="button" class="dialog-btn create-btn">Create</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <dialog id="create-task-dialog">
+        <div class="dialog-content-container">
+            <div>
+                <h1>Create Todo</h1>
+                <p>Give it a rhythm.</p>
+            </div>
+            <form id="task-form" class="dialog-form" action="">
+                <div>
+                    <label for="">Task</label>
+                    <input type="text">
+                </div>
+                <div>
+                    <label for="">Notes</label>
+                    <textarea class="textarea-task-notes" name="" id=""></textarea>
+                </div>
+                <div>
+                    <label for="">Due Date</label>
+                    <input type="date">
+                </div>
+                <fieldset>
+                    <legend>Priority</legend>
+                    <div class="task-radio-tile-group">
+                        <div class="task-input-container">
+                            <input class="low" type="radio" name="task-priority">
+                            <div class="task-radio-tile">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" 
+                                width="35px" fill="#FFFFFF"><path d="m80-80 800-800v800H80Zm320-80h400v-526L400-286v126Z"/></svg>
+                                <label for="">Low</label>
+                            </div>
+                        </div>
+                        <div class="task-input-container">
+                            <input class="medium" type="radio" name="task-priority">
+                            <div class="task-radio-tile">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" 
+                                width="35px" fill="#FFFFFF"><path d="m80-80 800-800v800H80Zm520-80h200v-526L600-486v326Z"/></svg>
+                                <label for="">Medium</label>
+                            </div>
+                        </div>
+                        <div class="task-input-container">
+                            <input class="high" type="radio" name="task-priority">
+                            <div class="task-radio-tile">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" 
+                                width="35px" fill="#FFFFFF"><path d="m80-80 800-800v800H80Z"/></svg>
+                                <label for="">High</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="dialog-btn-container">
+                    <button class="dialog-btn" data-close="create-task-dialog">Cancel</button>
+                    <button type="button" class="dialog-btn create-btn">Create</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
 </body>
 </html>
