@@ -6,11 +6,21 @@ const checkProjectsArray = () => {
     };
 };
 
-function getProjectStorage() { 
+const getProjectStorage = () => { 
     const getProjects = localStorage.getItem('pulse-projects'); 
     const getParseProjects =  JSON.parse(getProjects);
     return getParseProjects 
 }
+
+const findTodos = (projectTitle) => { 
+
+    const getProjects = getProjectStorage();
+    if (getProjects === null) return; 
+    return getProjects.find((val) => val.projectTitle === projectTitle);
+
+};
+
+// CRUD Functions
 
 function saveTodos(todoTitle, todoNotes, todoDueDate, todoPriority, todoId) { 
 
@@ -61,14 +71,6 @@ function removeProjects(projectId) {
     let getProjects = getProjectStorage(); 
     getProjects = getProjects.filter((val) => val.projectId !== projectId);
     localStorage.setItem('pulse-projects', JSON.stringify(getProjects));
-
-};
-
-function findTodos(projectTitle) { 
-
-    const getProjects = getProjectStorage();
-    if (getProjects === null) return; 
-    return getProjects.find((val) => val.projectTitle === projectTitle);
 
 };
 

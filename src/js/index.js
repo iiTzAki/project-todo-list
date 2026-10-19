@@ -5,85 +5,49 @@ import { getActiveProject, setActiveProject } from "./appState.js";
 import { renderProjectElements, renderTodoElements, renderAllTodoElements } from "./DOMbuilder.js";
 import { removeProjects, removeTodos } from "./storage.js";
 
+function sidebarEventListeners() { 
+    const getSidebar = document.getElementById("sidebar"); 
+    const getSubMenuBtn = document.querySelector(".dropdown-btn");
+    getSubMenuBtn.addEventListener('click', (e) => { 
+        e.currentTarget.nextElementSibling.classList.toggle('show'); 
+        e.currentTarget.classList.toggle('rotate')
 
-function setupEventListeners() { 
-    const getContentSidebar = document.querySelector(".content-sidebar")
-    const getProjectSubmitBtn = document.querySelector(".project-submit-btn"); 
-    const getFormSubmitBtn = document.querySelector(".submit-form-btn"); 
-    const getTodosContainer = document.getElementById("my-todos-container");
-    const getProjectContaienr = document.getElementById("my-projects-container"); 
-    const getProjectTitle = document.querySelector(".project-title"); 
-
-    document.addEventListener("DOMContentLoaded", () => { 
-        setActiveProject("All Tasks"); 
-        renderAllTodoElements(); 
-        renderProjectElements(); 
-    });
-
-    getProjectSubmitBtn.addEventListener('click', (e) => { 
-        e.preventDefault() 
-        const getProjectInput = document.getElementById("project-name").value; 
-        setActiveProject(getProjectInput);
-        getProjectTitle.textContent = getActiveProject();
-        createProjects(getProjectInput);
-        getTodosContainer.innerHTML = "";
-        getProjectContaienr.innerHTML = ""; 
-        renderProjectElements();
-        
+        if (getSidebar.classList.contains('close')) { 
+            getSidebar.classList.toggle('close'); 
+            getSubMenuBtn.classList.toggle('rotate');       
+        };
     }); 
 
-    getFormSubmitBtn.addEventListener('click', (e) => { 
-        e.preventDefault() 
-        const getTodoTitle = document.getElementById("todo-title").value; 
-        const getTodoNotes = document.getElementById("todo-notes").value;
-        const getTodoDueDate = document.getElementById("todo-due-date").value; 
-        const getTodoPriority = document.getElementById("todo-priority").value;
-        createTodos(getTodoTitle, getTodoNotes, getTodoDueDate, getTodoPriority);
 
-        getTodosContainer.innerHTML = ""; 
-        renderTodoElements(getActiveProject())
-
+    const getToggleButton = document.getElementById("sidebar-toggle-btn"); 
+    getToggleButton.addEventListener('click', (e) => { 
+        getSidebar.classList.toggle('close'); 
+        getToggleButton.classList.toggle('rotate');
+            
+        Array.from(getSidebar.getElementsByClassName('show')).forEach(ul => { 
+            ul.classList.remove('show')
+        })
     });
+};
 
-    getTodosContainer.addEventListener('click', (e) => { 
-        const getTodoRemoveBtn = e.target.closest('.todo-remove-btn');
-        
-        if (!getTodoRemoveBtn) return 
+function dialogsEventListeners() { 
+    document.addEventListener('click', (e) => {
+        const openBtn = e.target.closest('[data-dialog]'); 
+        const closeBtn = e.target.closest('[data-close]'); 
 
-        const getTodoId = getTodoRemoveBtn.dataset.todoId; 
-        removeTodos(getTodoId);
-        getTodosContainer.innerHTML = "";
-        getActiveProject() === "All Tasks" ? renderAllTodoElements() : renderTodoElements(getActiveProject());
+        if (openBtn) { 
+            document.getElementById(openBtn.dataset.dialog).showModal(); 
+        } else if (closeBtn) { 
+            e.preventDefault()
+            document.getElementById(closeBtn.dataset.close).close(); 
+        }; 
     });
+};
 
-    getProjectContaienr.addEventListener('click', (e) => { 
-        const getProjectRemoveBtn = e.target.closest('.remove-project-btn'); 
-        if (!getProjectRemoveBtn) return; 
-
-        const getProjectId = getProjectRemoveBtn.dataset.projectId; 
-        removeProjects(getProjectId); 
-        getProjectContaienr.innerHTML = ""; 
-        getTodosContainer.innerHTML = "";
-        renderProjectElements()
-    });
-    
-    getContentSidebar.addEventListener('click', (e) => { 
-
-        if (e.target.classList.contains('project-btn')) {
-            getTodosContainer.innerHTML = "";
-            renderTodoElements(e.target.textContent); 
-            setActiveProject(e.target.textContent);
-            getProjectTitle.textContent = getActiveProject();
-        };
-
-        if (e.target.classList.contains('all-tasks-btn')) { 
-            getTodosContainer.innerHTML = ""; 
-            setActiveProject("All Tasks"); 
-            renderAllTodoElements();
-        };
-
-    });
+function mainEventListeners() { 
+    sidebarEventListeners()
+    dialogsEventListeners()
 
 };
 
-setupEventListeners()
+mainEventListeners()
