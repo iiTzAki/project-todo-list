@@ -13,6 +13,7 @@ function createProjects(projectTitle) {
 
     const newProject = new Project(projectTitle)
     saveProjects(newProject.title, newProject.projectId)
+    return newProject.projectId;
 
 }
 

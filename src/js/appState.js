@@ -1,9 +1,9 @@
-let activeProjectTitle = null;  
+let activeProjectId = null;  
 
-export function setActiveProject(projectTitle) { 
-    activeProjectTitle = projectTitle; 
+export function setActiveProject(projectId) { 
+    activeProjectId = projectId; 
 }; 
 
 export function getActiveProject() { 
-    return activeProjectTitle;
+    return activeProjectId;
 }
