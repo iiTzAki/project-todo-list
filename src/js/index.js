@@ -4,7 +4,7 @@ import { createTodos } from "./create-todos.js"
 import { createProjects } from "./create-projects.js"
 import { getActiveProject, setActiveProject } from "./appState.js";
 import { renderProjectElements, renderTodoElements, renderAllTodoElements } from "./DOMbuilder.js";
-import { findProject, findTodo, removeProject, removeTodo, updateTodo } from "./storage.js";
+import { findProject, findTodo, removeProject, removeTodo, removeTodos, updateTodo } from "./storage.js";
 
 function sidebarEventListeners() { 
     const getSidebar = document.getElementById("sidebar"); 
@@ -123,8 +123,12 @@ function mainEventListeners() {
         if (e.target.closest('.delete-project-btn')) { 
             const deleteProjectId = e.target.closest('.delete-project-btn').dataset.projectId;
             removeProject(deleteProjectId); 
+            removeTodos(deleteProjectId);
+            getProjectHeading.textContent = "All Tasks"; 
             getMyProjects.innerHTML = "";
+            getTaskList.innerHTML = ""; 
             renderProjectElements();
+            renderAllTodoElements(); 
         
         }
 
