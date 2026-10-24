@@ -4,7 +4,7 @@ import { createTodos } from "./create-todos.js"
 import { createProjects } from "./create-projects.js"
 import { getActiveProject, setActiveProject } from "./appState.js";
 import { renderProjectElements, renderTodoElements, renderAllTodoElements } from "./DOMbuilder.js";
-import { findProject, removeProjects, removeTodos } from "./storage.js";
+import { findProject, findTodo, removeProject, removeTodo, updateTodo } from "./storage.js";
 
 function sidebarEventListeners() { 
     const getSidebar = document.getElementById("sidebar"); 
@@ -25,7 +25,7 @@ function sidebarEventListeners() {
         getSidebar.classList.toggle('close'); 
         getToggleButton.classList.toggle('rotate');
             
-        Array.from(getSidebar.getElementsByClassName('show')).forEach(ul => { 
+        Array.from(getSidebar.getElementsByClassName('show')).forEach(ul => {   
             ul.classList.remove('show')
         })
     });
@@ -39,10 +39,7 @@ function dialogsEventListeners() {
         if (openBtn) { 
             if (openBtn.dataset.dialog === 'create-task-dialog') { 
                 document.getElementById('task-date').value = format(new Date(), "yyyy-MM-dd")
-            }     
-            if (openBtn.dataset.dialog === 'edit-task-dialog') { 
-                document.getElementById('edit-task-date').value = format(new Date(), "yyyy-MM-dd")
-            }       
+            }           
             document.getElementById(openBtn.dataset.dialog).showModal(); 
         } else if (closeBtn) { 
             e.preventDefault()
@@ -61,6 +58,7 @@ function mainEventListeners() {
     
     const getProjectForm = document.getElementById('project-form'); 
     const getTaskForm = document.getElementById('task-form');
+    const getEditForm = document.getElementById('edit-task-form'); 
     const getTaskList = document.getElementById('task-list');
     const getMyProjects = document.getElementById('my-projects');
     const getProjectHeading = document.getElementById('task-heading-tag'); 
@@ -95,6 +93,23 @@ function mainEventListeners() {
 
     });
 
+    getEditForm.addEventListener('submit', (e) => { 
+
+        e.preventDefault()
+        const getTodoId = document.getElementById('edit-todo-id').value; 
+        const editTaskName = document.getElementById('edit-task-name').value;
+        const editTaskNotes = document.getElementById('edit-task-notes').value;
+        const editTaskDate = document.getElementById('edit-task-date').value;
+        const editTaskPriority = document.querySelector('input[name="edit-task-priority"]:checked')?.value ?? "";
+        
+        updateTodo(editTaskName, editTaskNotes, editTaskDate, editTaskPriority, getTodoId);
+        getEditForm.reset(); 
+        document.getElementById('edit-task-dialog').close();
+        getTaskList.innerHTML = ""; 
+        renderTodoElements(getActiveProject());
+
+    });
+
     document.getElementById('sidebar').addEventListener('click', (e) => { 
 
         if (e.target.closest('.project-btn')) { 
@@ -107,21 +122,32 @@ function mainEventListeners() {
         }
         if (e.target.closest('.delete-project-btn')) { 
             const deleteProjectId = e.target.closest('.delete-project-btn').dataset.projectId;
-            removeProjects(deleteProjectId);
-            getMyProjects.innerHTML = ""; 
+            removeProject(deleteProjectId); 
+            getMyProjects.innerHTML = "";
             renderProjectElements();
+        
         }
 
 
     });
 
     document.getElementById('task-list').addEventListener('click', (e) => { 
+        const getTaskContainer = e.target.closest('.task-container')
         const deleteTaskBtn = e.target.closest('.delete-btn');
+        const editTaskBtn = e.target.closest('.edit-btn');
+
         if(deleteTaskBtn) { 
-            removeTodos(deleteTaskBtn.dataset.todoId); 
+            removeTodo(getTaskContainer.dataset.todoId); 
             getTaskList.innerHTML = ""; 
             renderTodoElements(getActiveProject())
-        } 
+        } else if (editTaskBtn) { 
+            document.getElementById('edit-todo-id').value = getTaskContainer.dataset.todoId; 
+            const getTodo = findTodo(getTaskContainer.dataset.todoId);
+            document.getElementById('edit-task-name').value = getTodo.todoTitle
+            document.getElementById('edit-task-notes').value = getTodo.todoNotes
+            document.getElementById('edit-task-date').value = format(getTodo.todoDueDate, "yyyy-MM-dd"); 
+            document.querySelector(`input[name="edit-task-priority"][value=${getTodo.todoPriority}]`).checked = true;
+        }
     });
 
 };

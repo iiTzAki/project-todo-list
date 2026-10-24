@@ -70,6 +70,7 @@ function createProjectElement(projectName, projectId) {
 function createTodoElement(title, dueDate, priority, todoId) { 
     const getTaskList = document.getElementById('task-list');
     const taskContainer = document.createElement('div'); 
+    taskContainer.setAttribute('data-todo-id', todoId); 
     taskContainer.className = "task-container"; 
 
     // Task Details 

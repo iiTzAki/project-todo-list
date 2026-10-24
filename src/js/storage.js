@@ -22,14 +22,19 @@ const getTodoStorage = () => {
 }
 
 const findTodos = (projectId) => { 
-
     const getTodos = getTodoStorage();
     if (getTodos === null) return; 
 
     if (projectId === null) return getTodos
     return getTodos.filter((val) => val.projectId === projectId);
+}
 
-};
+const findTodo = (todoId) => { 
+    const getTodos = getTodoStorage(); 
+    if (getTodos === null) return; 
+
+    return getTodos.find((todo) => todo.todoId === todoId); 
+}
 
 const findProject = (projectId) => { 
     const getProjects = getProjectStorage(); 
@@ -69,15 +74,15 @@ function saveProjects(projectTitle, projectId) {
 
 };
 
-function removeTodos(todoId) { 
+function removeTodo(todoId) { 
 
     let getTodos = getTodoStorage();
     getTodos = getTodos.filter((todo) => todo.todoId !== todoId);
     localStorage.setItem('pulse-todos', JSON.stringify(getTodos));
     
-};
+}
 
-function removeProjects(projectId) { 
+function removeProject(projectId) { 
 
     let getProjects = getProjectStorage(); 
     let getTodos = getTodoStorage();
@@ -88,13 +93,30 @@ function removeProjects(projectId) {
 
 };
 
+function updateTodo(todoTitle, todoNotes, todoDueDate, todoPriority, todoId) { 
+    const getTodos = getTodoStorage(); 
+    if (getTodos === null) return; 
+    
+    getTodos.find((todo) => { 
+        if (todo.todoId === todoId) { 
+            todo.todoTitle = todoTitle;
+            todo.todoNotes = todoNotes;
+            todo.todoDueDate = todoDueDate;
+            todo.todoPriority = todoPriority;
+        }; 
+    }); 
+    localStorage.setItem('pulse-todos', JSON.stringify(getTodos));
+}
+
 export { 
     getProjectStorage, 
     getTodoStorage, 
     saveTodos, 
     saveProjects, 
-    removeTodos, 
-    removeProjects, 
+    removeTodo, 
+    removeProject,
+    updateTodo,  
     findTodos,
+    findTodo, 
     findProject
 }

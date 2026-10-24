@@ -386,13 +386,13 @@ body {
     color: var(--text-heading);
     display: grid;
     grid-template-rows: auto 1fr;
-    gap: 1.3em;
+    gap: 1.8em;
     padding: 5em;
     padding-top: .2em;
     > .task-header { 
         display: flex;
         justify-content: flex-start;
-        padding: 15px 25px;
+        padding: 15px 30px;
         background-color: hsl(from var(--accent) h s 20%);
         border-radius: 7px;
         border: 2px solid var(--accent);
