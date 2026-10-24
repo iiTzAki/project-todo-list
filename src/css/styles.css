@@ -19,6 +19,28 @@ input, textarea, select, button {
     font-size: 1rem;
 }
 
+@keyframes slide {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 body::-webkit-scrollbar { 
     display: none;
 }
@@ -34,8 +56,8 @@ body {
 }
 
 #sidebar { 
-    min-height: 100vh;
-    width: 223px;
+    min-height: 100dvh;
+    width: 230px;
     padding: 10px 1em;
     color: var(--text-heading);
     font-family: var(--font-family-display);
@@ -162,8 +184,10 @@ body {
             width: 100%;
             cursor: pointer;
             transition: var(--default-transition) var(--ease-default);
+            animation: slide 0.4s ease-out forwards;
             > .project-btn {
                 text-align: center;
+                overflow: hidden;
                 font-size: .9rem;
                 padding: 9px; 
                 flex: 1;
@@ -174,6 +198,11 @@ body {
                 width: 13%;
                 margin: auto;
                 border-radius: 50%;
+            }
+            .project-text { 
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .project-text::before { 
                 content: "";
@@ -357,13 +386,24 @@ body {
     color: var(--text-heading);
     display: grid;
     grid-template-rows: auto 1fr;
+    gap: 1.3em;
     padding: 5em;
     padding-top: .2em;
     > .task-header { 
         display: flex;
-        justify-content: space-between;
-        padding: 10px;
+        justify-content: flex-start;
+        padding: 15px 25px;
+        background-color: hsl(from var(--accent) h s 20%);
+        border-radius: 7px;
+        border: 2px solid var(--accent);
+        width: max-content;
         font-size: var(--font-family-base);
+        > h2 { 
+            margin-left: 5px;
+        }
+        > svg { 
+            flex-shrink: 1;
+        }
     }
 }
 
@@ -381,6 +421,7 @@ body {
     padding-bottom: 2em;
     border-bottom: 1px solid #858788;
     cursor: pointer;
+    animation: slide-up 0.5s ease-in-out forwards;
     .task-details-wrapper { 
         display: grid;
         grid-template-columns: auto 1fr;
@@ -401,8 +442,8 @@ body {
     }
 }
 
-#task-priority,
-#task-due-date { 
+.task-priority,
+.task-due-date { 
     margin-top: 2px;
     word-spacing: -2px;
     letter-spacing: 1.4px;
@@ -413,7 +454,7 @@ body {
     border-radius: 10px;
 }
 
-#task-priority { 
+.task-priority { 
     word-spacing: 0px;
     letter-spacing: 0px;
     background-color: transparent;

@@ -70,6 +70,8 @@ dialog label {
 .dialog-btn-container { 
     margin-top: 20px;
     margin-left: auto;
+    > .dialog-search-btn,
+    > .save-changes-btn,
     > .create-btn { 
         color: var(--bg);
         background: var(--accent);
@@ -93,19 +95,23 @@ dialog label {
     background: hsl(from var(--accent) h 20% 20%)
 }
 
+.dialog-search-btn:hover,
+.save-changes-btn:hover,
 .create-btn:hover { 
     transform: translateY(-3px);
     background: hsl(from var(--accent) h s 40%);
     color: currentColor;
 }
 
-/* Create Task Dialog */
+/* Create & Edit Task Dialog Styles */
 
+#edit-task-dialog,
 #create-task-dialog { 
     max-width: 500px;
     width: 100%;
 }
 
+#edit-task-form > fieldset, 
 #task-form > fieldset { 
     padding: 1.3em;
     border-radius: 10px;
@@ -188,3 +194,16 @@ dialog label {
     background-color: hsl(from var(--accent) h s 45%);
     box-shadow: 0px 0px 15px #b298dc;
 } 
+
+/* Search Task Dialog Styles */
+
+#search-task-dialog {
+    width: 550px;
+    min-height: 400px;
+} 
+
+#search-task-dialog .search-results {
+    margin: 24px auto;
+    width: calc(100% - 20px); 
+    border-top: 2px solid #FFFFFF;
+}
