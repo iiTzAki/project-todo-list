@@ -1,24 +1,41 @@
 import {getActiveProject} from "./appState.js";
 
-const checkProjectsArray = () => {
+const checkInitialStorage = () => {
     if (getProjectStorage() === null) { 
         localStorage.setItem('pulse-projects', '[]'); 
     };
-};
+    if (getTodoStorage() === null) { 
+        localStorage.setItem('pulse-todos', '[]'); 
+    };
+}
 
 const getProjectStorage = () => { 
     const getProjects = localStorage.getItem('pulse-projects'); 
-    const getParseProjects =  JSON.parse(getProjects);
+    const getParseProjects = JSON.parse(getProjects);
     return getParseProjects 
 }
 
-const findTodos = (projectTitle) => { 
+const getTodoStorage = () => { 
+    const getTodos = localStorage.getItem('pulse-todos'); 
+    const getParseTodos = JSON.parse(getTodos); 
+    return getParseTodos
+}
 
-    const getProjects = getProjectStorage();
-    if (getProjects === null) return; 
-    return getProjects.find((val) => val.projectTitle === projectTitle);
+const findTodos = (projectId) => { 
+
+    const getTodos = getTodoStorage();
+    if (getTodos === null) return; 
+
+    if (projectId === null) return getTodos
+    return getTodos.filter((val) => val.projectId === projectId);
 
 };
+
+const findProject = (projectId) => { 
+    const getProjects = getProjectStorage(); 
+    if (getProjects === null) return; 
+    return getProjects.find((val) => val.projectId === projectId);
+}
 
 // CRUD Functions
 
@@ -30,26 +47,22 @@ function saveTodos(todoTitle, todoNotes, todoDueDate, todoPriority, todoId) {
         todoDueDate, 
         todoPriority,
         todoId,
+        projectId : getActiveProject(), 
     }; 
-    checkProjectsArray()
-    const getProjects = getProjectStorage();  
-    const targetProject = getProjects.find((val) => val.projectTitle === getActiveProject()); 
-
-    if (targetProject) { 
-        targetProject.todos.push(todoData);
-    };
-    localStorage.setItem('pulse-projects', JSON.stringify(getProjects));
+    checkInitialStorage()
+    const getTodos = getTodoStorage();  
+    getTodos.push(todoData);
+    localStorage.setItem('pulse-todos', JSON.stringify(getTodos));
 
 };
 
 function saveProjects(projectTitle, projectId) { 
 
-    checkProjectsArray()
+    checkInitialStorage()
     const getProjects = getProjectStorage(); 
     const todoData = {
         projectTitle, 
         projectId, 
-        todos: [] 
     }; 
     getProjects.push(todoData);
     localStorage.setItem('pulse-projects', JSON.stringify(getProjects));
@@ -58,27 +71,30 @@ function saveProjects(projectTitle, projectId) {
 
 function removeTodos(todoId) { 
 
-    const getProjects = getProjectStorage();
-    getProjects.forEach(val => {
-        val.todos = val.todos.filter((todo) => todo.todoId !== todoId); 
-    });
-    localStorage.setItem('pulse-projects', JSON.stringify(getProjects));
+    let getTodos = getTodoStorage();
+    getTodos = getTodos.filter((todo) => todo.todoId !== todoId);
+    localStorage.setItem('pulse-todos', JSON.stringify(getTodos));
     
 };
 
 function removeProjects(projectId) { 
 
     let getProjects = getProjectStorage(); 
-    getProjects = getProjects.filter((val) => val.projectId !== projectId);
+    let getTodos = getTodoStorage();
+    getTodos = getTodos.filter((todo) => todo.projectId !== projectId); 
+    getProjects = getProjects.filter((project) => project.projectId !== projectId);
+    localStorage.setItem('pulse-todos', JSON.stringify(getTodos)); 
     localStorage.setItem('pulse-projects', JSON.stringify(getProjects));
 
 };
 
 export { 
     getProjectStorage, 
+    getTodoStorage, 
     saveTodos, 
     saveProjects, 
     removeTodos, 
     removeProjects, 
-    findTodos 
+    findTodos,
+    findProject
 }
