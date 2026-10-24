@@ -23,7 +23,7 @@
         <ul>    
                 <h2 class="sidebar-text">Filters</h2>
                 <li>
-                    <button class="default-sidebar-btn">
+                    <button class="default-sidebar-btn" data-dialog="search-task-dialog">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search preview-icon"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
                         <span class="sidebar-text">Search</span>
                     </button>
@@ -70,26 +70,7 @@
                     </button>
                     <ul class="projects-sub-menu">
                         <!-- Projects -->
-                        <div>
-                            <li class="project-action-buttons">
-                                <button class="project-btn">
-                                    <span class="project-text">My Day</span>
-                                </button>
-                                <button class="delete-project-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                                </button>
-                            </li>      
-                            
-                            
-                            <li class="project-action-buttons">
-                                <button class="project-btn">
-                                    <span class="project-text">My Day</span>
-                                </button>
-                                <button class="delete-project-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                                </button>
-                            </li>                              
-                        </div>
+                        <div id="my-projects"></div>
                     </ul>
                 </li>
         </ul>
@@ -108,27 +89,27 @@
             <div class="project-container">
                 <div class="project-heading-wrapper">
                     <h2>Pulse</h2>
-                    <h1>Your Tasks</h1>
+                    <h1 id="task-heading-tag">All Tasks</h1>
                     <p>Stay in rhythm.</p>
                 </div>
                 <div class="card-container">
                     <div class="todo-filter-card filter-card">
-                        <span>To Do</span>
+                        <span>Today</span>
                         <div class="filter-number"><p>0</p></div>
                     </div>
                     <div class="completed-filter-card filter-card">
-                        <span>Completed</span>
+                        <span>To Do</span>
                         <div class="filter-number"><p>0</p></div>
                     </div>
                     <div class="projects-filter-card filter-card">
-                        <span>Projects</span>
+                        <span>Completed</span>
                         <div class="filter-number"><p>0</p></div>
                     </div>
                 </div>
             </div>
             <div class="datetime-container">
-                <div class="date">Thrusday, October 16</div>
-                <div class="time">12:00 AM</div>
+                <div class="date"></div>
+                <div class="time"></div>
                 <button class="add-todo-btn" data-dialog="create-task-dialog">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
                 </button>
@@ -137,32 +118,11 @@
 
         <div class="task-panel">
             <div class="task-header">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" viewBox="0 0 24 24"><path d="M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" /></svg>
                 <h2>Tasks</h2>
             </div>
-            <div class="task-list">
-                <div class="task-container">
-                    <div>
-                        <div class="task-details-wrapper">
-                            <div class="marker-input-container">
-                                <input type="checkbox" name="" id="">
-                                <div class="marker-radio-tile">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check preview-icon"><path d="M20 6 9 17l-5-5"/></svg>
-                                </div>
-                            </div>
-                            <div class="metadata-container">
-                                <h2 id="task-name">Clean Drawers</h2>
-                                <div>
-                                    <p id="task-due-date">Oct 12, 2026</p>                                    
-                                    <p id="task-priority">Medium</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="action-btn-container">
-                        <button class="action-btn edit-btn">Edit</button>
-                        <button class="action-btn delete-btn">Delete</button>
-                    </div>
-                </div>
+            <div class="task-list" id="task-list">
+
                                   
             </div>
         </div>
@@ -177,14 +137,14 @@
                 <h1>Create Project</h1>
                 <p>Project to Manage Todos.</p>
             </div>
-            <form id="project-form" class="dialog-form" action="">
+            <form id="project-form" class="dialog-form">
                 <div>
-                    <label for="">Project Name</label>
-                    <input type="text" placeholder="eg Clean Day">
+                    <label for="project-name">Project Name</label>
+                    <input type="text" name="project-name" id="project-name" placeholder="eg Clean Day">
                 </div>
                 <div class="dialog-btn-container">
                     <button class="close-project-dialog dialog-btn" data-close="create-project-dialog">Cancel</button>
-                    <button type="button" class="dialog-btn create-btn">Create</button>
+                    <button type="submit" id="project-create-btn" class="dialog-btn create-btn">Create</button>
                 </div>
             </form>
         </div>
@@ -196,53 +156,128 @@
                 <h1>Create Todo</h1>
                 <p>Give it a rhythm.</p>
             </div>
-            <form id="task-form" class="dialog-form" action="">
+            <form id="task-form" class="dialog-form">
                 <div>
-                    <label for="">Task</label>
-                    <input type="text">
+                    <label for="task-name">Task</label>
+                    <input type="text" id="task-name" name="task-name" required>
                 </div>
                 <div>
-                    <label for="">Notes</label>
-                    <textarea class="textarea-task-notes" name="" id=""></textarea>
+                    <label for="task-notes">Notes</label>
+                    <textarea class="textarea-task-notes" name="task-notes" id="task-notes"></textarea>
                 </div>
                 <div>
-                    <label for="">Due Date</label>
-                    <input type="date">
+                    <label for="task-date">Due Date</label>
+                    <input type="date" name="task-date" id="task-date">
                 </div>
                 <fieldset>
                     <legend>Priority</legend>
                     <div class="task-radio-tile-group">
                         <div class="task-input-container">
-                            <input class="low" type="radio" name="task-priority">
+                            <input class="low" type="radio" name="task-priority" id="task-priority-low" value="Low">
                             <div class="task-radio-tile">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" 
                                 width="35px" fill="#FFFFFF"><path d="m80-80 800-800v800H80Zm320-80h400v-526L400-286v126Z"/></svg>
-                                <label for="">Low</label>
+                                <label for="task-priority-low">Low</label>
                             </div>
                         </div>
                         <div class="task-input-container">
-                            <input class="medium" type="radio" name="task-priority">
+                            <input class="medium" type="radio" name="task-priority" id="task-priority-medium" value="Medium"> 
                             <div class="task-radio-tile">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" 
                                 width="35px" fill="#FFFFFF"><path d="m80-80 800-800v800H80Zm520-80h200v-526L600-486v326Z"/></svg>
-                                <label for="">Medium</label>
+                                <label for="task-priority-medium">Medium</label>
                             </div>
                         </div>
                         <div class="task-input-container">
-                            <input class="high" type="radio" name="task-priority">
+                            <input class="high" type="radio" name="task-priority" id="task-priority-high" value="High">
                             <div class="task-radio-tile">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" 
                                 width="35px" fill="#FFFFFF"><path d="m80-80 800-800v800H80Z"/></svg>
-                                <label for="">High</label>
+                                <label for="task-priority-high">High</label>
                             </div>
                         </div>
                     </div>
                 </fieldset>
                 <div class="dialog-btn-container">
                     <button class="dialog-btn" data-close="create-task-dialog">Cancel</button>
-                    <button type="button" class="dialog-btn create-btn">Create</button>
+                    <button type="submit" id="create-task-btn" class="dialog-btn create-btn">Create</button>
                 </div>
             </form>
+        </div>
+    </dialog>
+
+    <dialog id="search-task-dialog">
+        <div class="dialog-content-container">
+            <div>
+                <h1>Search Task</h1>
+                <p>Find a Task by the Title</p>
+            </div>
+            <form id="search-form" class="dialog-form">
+                <div>
+                    <label for="task-search">Search</label>
+                    <input type="text" id="task-search" name="task-search">
+                </div>
+                <div class="dialog-btn-container">
+                    <button class="dialog-btn" data-close="search-task-dialog">Cancel</button>
+                    <button type="submit" id="search-task-btn" class="dialog-btn dialog-search-btn">Find</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <dialog id="edit-task-dialog">
+        <div class="dialog-content-container">
+            <div>
+                <h1>Edit Task</h1>
+                <p>Configure Your Work</p>
+            </div>
+            <form id="edit-task-form" class="dialog-form">
+                <div>
+                    <label for="edit-task-name">Task</label>
+                    <input type="text" id="edit-task-name" name="edit-task-name" required>
+                </div>
+                <div>
+                    <label for="edit-task-notes">Notes</label>
+                    <textarea class="textarea-task-notes" name="edit-task-notes" id="edit-task-notes"></textarea>
+                </div>
+                <div>
+                    <label for="edit-task-date">Due Date</label>
+                    <input type="date" name="edit-task-date" id="edit-task-date">
+                </div>
+                <fieldset>
+                    <legend>Priority</legend>
+                    <div class="task-radio-tile-group">
+                        <div class="task-input-container">
+                            <input class="low" type="radio" name="edit-task-priority" id="edit-task-priority-low" value="Low">
+                            <div class="task-radio-tile">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" 
+                                width="35px" fill="#FFFFFF"><path d="m80-80 800-800v800H80Zm320-80h400v-526L400-286v126Z"/></svg>
+                                <label for="edit-task-priority-low">Low</label>
+                            </div>
+                        </div>
+                        <div class="task-input-container">
+                            <input class="medium" type="radio" name="edit-task-priority" id="edit-task-priority-medium" value="Medium"> 
+                            <div class="task-radio-tile">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" 
+                                width="35px" fill="#FFFFFF"><path d="m80-80 800-800v800H80Zm520-80h200v-526L600-486v326Z"/></svg>
+                                <label for="edit-task-priority-medium">Medium</label>
+                            </div>
+                        </div>
+                        <div class="task-input-container">
+                            <input class="high" type="radio" name="edit-task-priority" id="edit-task-priority-high" value="High">
+                            <div class="task-radio-tile">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" 
+                                width="35px" fill="#FFFFFF"><path d="m80-80 800-800v800H80Z"/></svg>
+                                <label for="edit-task-priority-high">High</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="dialog-btn-container">
+                    <button class="dialog-btn" data-close="edit-task-dialog">Cancel</button>
+                    <button type="submit" id="save-changes-btn" class="dialog-btn save-changes-btn">Save Changes</button>
+                </div>
+            </form>            
         </div>
     </dialog>
 
