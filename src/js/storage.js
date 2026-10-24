@@ -82,6 +82,14 @@ function removeTodo(todoId) {
     
 }
 
+function removeTodos(projectId) { 
+
+    let getTodos = getTodoStorage(); 
+    getTodos = getTodos.filter((todo) => todo.projectId !== projectId); 
+    localStorage.setItem('pulse-todos', JSON.stringify(getTodos)); 
+
+}
+
 function removeProject(projectId) { 
 
     let getProjects = getProjectStorage(); 
@@ -113,7 +121,8 @@ export {
     getTodoStorage, 
     saveTodos, 
     saveProjects, 
-    removeTodo, 
+    removeTodo,
+    removeTodos, 
     removeProject,
     updateTodo,  
     findTodos,
