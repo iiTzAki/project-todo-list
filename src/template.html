@@ -181,7 +181,7 @@
                             </div>
                         </div>
                         <div class="task-input-container">
-                            <input class="medium" type="radio" name="task-priority" id="task-priority-medium" value="Medium"> 
+                            <input checked class="medium" type="radio" name="task-priority" id="task-priority-medium" value="Medium"> 
                             <div class="task-radio-tile">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" 
                                 width="35px" fill="#FFFFFF"><path d="m80-80 800-800v800H80Zm520-80h200v-526L600-486v326Z"/></svg>
@@ -219,7 +219,7 @@
                 </div>
                 <div class="dialog-btn-container">
                     <button class="dialog-btn" data-close="search-task-dialog">Cancel</button>
-                    <button type="submit" id="search-task-btn" class="dialog-btn dialog-search-btn">Find</button>
+                    <button type="button" class="dialog-btn dialog-search-btn">Find</button>
                 </div>
             </form>
         </div>
@@ -232,6 +232,7 @@
                 <p>Configure Your Work</p>
             </div>
             <form id="edit-task-form" class="dialog-form">
+                <input type="hidden" id="edit-todo-id" name="todo-id">
                 <div>
                     <label for="edit-task-name">Task</label>
                     <input type="text" id="edit-task-name" name="edit-task-name" required>
