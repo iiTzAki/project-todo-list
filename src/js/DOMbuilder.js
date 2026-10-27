@@ -1,44 +1,22 @@
-import {getProjectStorage, getTodoStorage, findTodos} from "./storage.js";
-
-function renderProjectElements() { 
-
-    const getProjects = getProjectStorage(); 
-    if (getProjects === null) return;
-
-    getProjects.forEach(project => {
-        createProjectElement(project.projectTitle, project.projectId)
+function renderProjectElements(projects) { 
+    document.getElementById("my-projects").innerHTML = ""
+    projects.forEach(p => {
+        createProjectElement(p.title, p.projectId);
     });
-
 }
 
-function renderTodoElements(projectId) { 
-
-    const searchTodos = findTodos(projectId)
-    if(!searchTodos) return;
- 
-    searchTodos.forEach(todo => {
-        createTodoElement(
-            todo.todoTitle,
-            todo.todoDueDate,
-            todo.todoPriority,
-            todo.todoId
-        );
+function renderTaskElements(tasks) { 
+    document.getElementById("task-list").innerHTML = ""
+    tasks.forEach(t => {
+        createTaskElement(
+            t.title, 
+            t.dueDate,
+            t.taskPriority,
+            t.isComplete, 
+            t.todoId 
+        )
     });
-
-};
-
-function renderAllTodoElements() { 
-    const getAllTodos = getTodoStorage(); 
-    if(!getAllTodos) return;  
-    getAllTodos.forEach(todo => {
-        createTodoElement(
-            todo.todoTitle,
-            todo.todoDueDate,
-            todo.todoPriority,
-            todo.todoId
-        );
-    });
-};
+}
 
 function createProjectElement(projectName, projectId) { 
 
@@ -56,18 +34,22 @@ function createProjectElement(projectName, projectId) {
 
     const deleteProjectBtn = document.createElement('button'); 
     deleteProjectBtn.className = "delete-project-btn"; 
-    deleteProjectBtn.setAttribute('data-project-id', projectId);
     deleteProjectBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13"
     viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" 
     stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M18 6 6 18"/>
     <path d="m6 6 12 12"/></svg>`;
 
-    projectActionBtns.append(projectBtn, deleteProjectBtn); 
+    projectActionBtns.append(projectBtn);
+
+    // To not append delete btn on Default/Inbox Project
+    if (projectId !== "default") {
+        projectActionBtns.appendChild(deleteProjectBtn)
+    } 
     getMyProjects.appendChild(projectActionBtns); 
     
 };
 
-function createTodoElement(title, dueDate, priority, todoId) { 
+function createTaskElement(taskTitle, taskDueDate, taskPriority, taskStatus, todoId) { 
     const getTaskList = document.getElementById('task-list');
     const taskContainer = document.createElement('div'); 
     taskContainer.setAttribute('data-todo-id', todoId); 
@@ -86,6 +68,7 @@ function createTodoElement(title, dueDate, priority, todoId) {
     markerInput.setAttribute("type", "checkbox");
     markerInput.setAttribute("name", "task-marker");
     markerInput.setAttribute("id", "task-marker");
+    markerInput.checked = taskStatus;  
 
     const markerRadioTile = document.createElement('div');
     markerRadioTile.className = "marker-radio-tile";
@@ -95,20 +78,20 @@ function createTodoElement(title, dueDate, priority, todoId) {
 
     markerContainer.append(markerInput, markerRadioTile); 
 
-    const taskName = document.createElement('h2'); 
-    taskName.className = "task-name";
-    taskName.textContent = title; 
+    const taskNameElement = document.createElement('h2'); 
+    taskNameElement.className = "task-name";
+    taskNameElement.textContent = taskTitle; 
 
     const extraTaskDetails = document.createElement('div'); 
-    const taskDueDate = document.createElement('p'); 
-    const taskPriority = document.createElement('p'); 
-    taskDueDate.className = "task-due-date"; 
-    taskPriority.className = "task-priority"; 
-    taskDueDate.textContent = dueDate;
-    taskPriority.textContent = priority; 
+    const taskDateElement = document.createElement('p'); 
+    const taskPriorityElement = document.createElement('p'); 
+    taskDateElement.className = "task-due-date"; 
+    taskPriorityElement.className = "task-priority"; 
+    taskDateElement.textContent = taskDueDate;
+    taskPriorityElement.textContent = taskPriority; 
 
-    extraTaskDetails.append(taskDueDate, taskPriority); 
-    dataContainer.append(taskName, extraTaskDetails);
+    extraTaskDetails.append(taskDateElement, taskPriorityElement); 
+    dataContainer.append(taskNameElement, extraTaskDetails);
 
     taskDetailsWrapper.append(markerContainer, dataContainer); 
     structureDiv.appendChild(taskDetailsWrapper); 
@@ -122,7 +105,6 @@ function createTodoElement(title, dueDate, priority, todoId) {
     editBtn.classList.add('edit-btn'); 
     deleteBtn.classList.add('delete-btn');
     editBtn.setAttribute('data-dialog', 'edit-task-dialog')
-    deleteBtn.setAttribute('data-todo-id', todoId);
     editBtn.textContent = "Edit";
     deleteBtn.textContent = "Delete";
     actionBtnContianer.append(editBtn, deleteBtn); 
@@ -132,8 +114,7 @@ function createTodoElement(title, dueDate, priority, todoId) {
     getTaskList.appendChild(taskContainer); 
 };
 
-export {
+export { 
     renderProjectElements, 
-    renderTodoElements, 
-    renderAllTodoElements
+    renderTaskElements
 }

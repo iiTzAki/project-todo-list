@@ -1,4 +1,4 @@
-let activeProjectId = null;  
+let activeProjectId = "default";  
 
 export function setActiveProject(projectId) { 
     activeProjectId = projectId; 
