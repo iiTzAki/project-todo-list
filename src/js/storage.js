@@ -55,7 +55,12 @@ export class Store {
     }
 
     saveProjects() { 
-        localStorage.setItem('pulse-projects', JSON.stringify(this.#projects))
+        // To Catch if the storage is full and other errors 
+        try { 
+            localStorage.setItem('pulse-projects', JSON.stringify(this.#projects))
+        } catch { 
+            console.warn("Project Not Saved.")
+        }
     }
 
 

@@ -10,7 +10,7 @@ export class Project {
     }
 
     get tasks() { 
-        return this.#tasks
+        return [...this.#tasks]
     }
 
     static fromJSON(projectData) { 
@@ -34,13 +34,13 @@ export class Project {
     }
 
     removeTask(taskId) { 
-        const getTaskIndex = this.#tasks.findIndex((task) => task.id === taskId); 
+        const getTaskIndex = this.#tasks.findIndex((task) => task.todoId === taskId); 
         if(getTaskIndex === -1) return;
         this.#tasks.splice(getTaskIndex, 1)
     }
 
     findTask(taskId) { 
-        return this.#tasks.find((task) => task.id === taskId); 
+        return this.#tasks.find((task) => task.todoId === taskId); 
     }
 
 }

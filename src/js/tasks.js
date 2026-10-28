@@ -18,10 +18,10 @@ export class Task {
             this.#title = "New Task"
             return
         }
-        this.#title = newTitle;
+        this.#title = newTitle.trim();
     }
 
-    set taskPriority(newPriority) { 
+    set taskPriority(newPriority) {  
         if (!["low", "medium", "high"].includes(newPriority)) { 
             console.warn("Invalid Priority, Set Priority to none")
             this.#taskPriority = ""
@@ -40,7 +40,7 @@ export class Task {
             taskData.notes, 
             taskData.dueDate, 
             taskData.taskPriority
-        ) 
+        )   
         newTask.todoId = taskData.todoId
         newTask.#isComplete = taskData.isComplete
         return newTask
@@ -51,7 +51,7 @@ export class Task {
             title: this.#title, 
             notes: this.notes, 
             dueDate: this.dueDate, 
-            priority: this.#taskPriority,
+            taskPriority: this.#taskPriority,
             isComplete: this.#isComplete, 
             todoId: this.todoId,
         }
