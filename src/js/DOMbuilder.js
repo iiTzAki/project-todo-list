@@ -1,3 +1,5 @@
+import { format, parseISO } from "date-fns"
+
 function renderProjectElements(projects) { 
     document.getElementById("my-projects").innerHTML = ""
     projects.forEach(p => {
@@ -86,9 +88,9 @@ function createTaskElement(taskTitle, taskDueDate, taskPriority, taskStatus, tod
     const taskDateElement = document.createElement('p'); 
     const taskPriorityElement = document.createElement('p'); 
     taskDateElement.className = "task-due-date"; 
-    taskPriorityElement.className = "task-priority"; 
-    taskDateElement.textContent = taskDueDate;
-    taskPriorityElement.textContent = taskPriority; 
+    taskPriorityElement.className = "task-priority";
+    taskDateElement.textContent = format(parseISO(taskDueDate), "LLLL d, yyyy");
+    taskPriorityElement.textContent = taskPriority.charAt(0).toUpperCase() + taskPriority.slice(1);
 
     extraTaskDetails.append(taskDateElement, taskPriorityElement); 
     dataContainer.append(taskNameElement, extraTaskDetails);
