@@ -72,11 +72,12 @@ function init() {
 
         const getTaskDeleteBtn = e.target.closest('.delete-btn'); 
         const getTaskEditBtn = e.target.closest('.edit-btn'); 
-        const getTaskId = e.target.closest('[data-todo-id]');
+        const getTaskToggleBtn = e.target.closest('#task-marker');
+        const getTaskIdElement = e.target.closest('[data-todo-id]');
 
         // Delete Task
         if (getTaskDeleteBtn) { 
-            const getTaskId = e.target.closest('[data-todo-id]').dataset.todoId; 
+            const getTaskId = getTaskId.dataset.todoId; 
 
             // Get Current Project
             const getCurrentProject = pulseStore.findProject(getActiveProject());
@@ -93,7 +94,7 @@ function init() {
         }
         // Update Task
         else if (getTaskEditBtn) { 
-            document.getElementById('edit-todo-id').value = getTaskId.dataset.todoId;
+            document.getElementById('edit-todo-id').value = getTaskIdElement.dataset.todoId;
 
             const getCurrentProject = pulseStore.findProject(getActiveProject()); 
             if (!getCurrentProject) { 
@@ -101,7 +102,7 @@ function init() {
             };
 
             // Get Task And Grab Inputs 
-            const getTask = getCurrentProject.findTask(getTaskId.dataset.todoId); 
+            const getTask = getCurrentProject.findTask(getTaskIdElement.dataset.todoId); 
             document.getElementById('edit-task-name').value = getTask.title
             document.getElementById('edit-task-notes').value = getTask.notes
             document.getElementById('edit-task-date').value = format(getTask.dueDate, "yyyy-MM-dd"); 
@@ -112,7 +113,22 @@ function init() {
                     radio.disabled = true; 
                 });
             };
-        };
+        } 
+        // Toggle Task
+        else if (getTaskToggleBtn) {  
+            const getTaskId = getTaskIdElement.dataset.todoId;
+
+            // Get Current Project
+            const getCurrentProject = pulseStore.findProject(getActiveProject()); 
+            if (!getCurrentProject) return; 
+
+            // Get Task and Toggle Task Status 
+            const getTask = getCurrentProject.findTask(getTaskId);
+            getTask.toggleState(); 
+
+            renderTaskElements(getCurrentProject.tasks); 
+        }; 
+
 
     });
 

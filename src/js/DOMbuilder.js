@@ -87,12 +87,25 @@ function createTaskElement(taskTitle, taskDueDate, taskPriority, taskStatus, tod
     const extraTaskDetails = document.createElement('div'); 
     const taskDateElement = document.createElement('p'); 
     const taskPriorityElement = document.createElement('p'); 
+    const taskStateElement = document.createElement('p'); 
+    taskStateElement.classList.add('task-state');
+    
+    // Style if the task is Complete
+    if (taskStatus) {
+        taskNameElement.classList.toggle('completed')
+        taskStateElement.classList.toggle('completed');
+        taskStateElement.textContent = "Completed";
+    } else { 
+        taskStateElement.textContent = "Not Completed";
+    };
+
     taskDateElement.className = "task-due-date"; 
-    taskPriorityElement.className = "task-priority";
+    taskPriorityElement.classList.add('task-priority');
+    taskPriorityElement.classList.toggle(taskPriority);
     taskDateElement.textContent = format(parseISO(taskDueDate), "LLLL d, yyyy");
     taskPriorityElement.textContent = taskPriority.charAt(0).toUpperCase() + taskPriority.slice(1);
 
-    extraTaskDetails.append(taskDateElement, taskPriorityElement); 
+    extraTaskDetails.append(taskDateElement, taskStateElement, taskPriorityElement); 
     dataContainer.append(taskNameElement, extraTaskDetails);
 
     taskDetailsWrapper.append(markerContainer, dataContainer); 

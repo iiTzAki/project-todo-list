@@ -191,8 +191,9 @@ dialog label {
     box-shadow: 0px 0px 15px #b298dc;    
 } 
 .task-input-container > .high:checked + .task-radio-tile {
-    background-color: hsl(from var(--accent) h s 45%);
-    box-shadow: 0px 0px 15px #b298dc;
+    background-color: #640d14;
+    box-shadow: 0px 0px 15px #8b131d;
+    border: 1px solid black;
 } 
 
 /* Search Task Dialog Styles */
