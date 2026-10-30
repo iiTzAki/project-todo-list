@@ -3,20 +3,50 @@ import { format } from "date-fns";
 import { Task } from "./tasks.js"
 import { Project } from "./projects.js"
 import { Store } from "./storage.js"
+import { updateFilterCards, getFilterTodayTasks, getFilterUpcomingTasks, getFilterAnytimeTasks, getFilterCompletedTasks } from "./filters.js";
 import { renderProjectElements, renderTaskElements } from "./DOMbuilder.js";
-import { setActiveProject, getActiveProject } from "./appState.js"
+import { enterProjectMode, enterFilterMode, subscribe, setActiveProject, getActiveProject, getActiveViewState, getActiveFilterState } from "./appState.js"
 
 const pulseStore = new Store(); // Start Storage 
-const renderAllElements = (projects) => { 
-    renderProjectElements(projects);
-    const project = pulseStore.findProject(getActiveProject());
-    if (!project) return; 
-    renderTaskElements(project.tasks);
-};
+const renderFilterCards = () => { 
+    const getCurrentProject = pulseStore.findProject(getActiveProject()); 
+    if (!getCurrentProject) return;
+    
+    updateFilterCards(getCurrentProject.tasks)
+}
 const updateHeading = () => { 
     const project = pulseStore.findProject(getActiveProject()); 
     if (!project) return; 
     document.getElementById('task-heading-tag').textContent = project.title; 
+};
+const updateDate = () => { 
+    const getWeekDayElement = document.querySelector('.week-day');
+    const getDateElement = document.querySelector('.date'); 
+    getWeekDayElement.textContent = format(new Date(), "cccc,");
+    getDateElement.textContent = format(new Date(), "LLLL d") 
+}; 
+function render() {
+    // If Clause for Projects  
+    if (getActiveViewState() === "project") {
+        const project = pulseStore.findProject(getActiveProject());
+
+        if (!project) return; 
+        renderTaskElements(project.tasks);
+    }
+    // If Clause for Filters
+    else if (getActiveViewState() === "filter") {
+        const projects = pulseStore.projects; 
+        const filterState = getActiveFilterState(); 
+
+        const filterStates = { 
+            "today": getFilterTodayTasks, 
+            "upcoming": getFilterUpcomingTasks, 
+            "anytime": getFilterAnytimeTasks, 
+            "completed": getFilterCompletedTasks,
+        };
+        const tasks = filterStates[filterState](projects);
+        renderTaskElements(tasks)
+    }; 
 };
 
 function init() {  
@@ -24,8 +54,11 @@ function init() {
     // App Start Up 
     pulseStore.loadProjects();
     pulseStore.ensureDefaultProject();
+    updateDate();
+    renderFilterCards();
+    renderProjectElements(pulseStore.projects); 
+    setActiveProject("default");
     updateHeading();
-    renderAllElements(pulseStore.projects);
 
 
     // Form Elements
@@ -42,18 +75,19 @@ function init() {
     getSidebar.addEventListener('click', (e) => {
         const getProjectBtn = e.target.closest('.project-btn');
         const getDeleteProjectBtn = e.target.closest('.delete-project-btn'); 
+        const filterBtn = e.target.closest('.filter-btn');
 
         // Select Project 
         if (getProjectBtn) { 
             const getProjectId = e.target.closest('.project-action-buttons').querySelector('[data-project-id]').dataset.projectId;
-            setActiveProject(getProjectId);
+            enterProjectMode(getProjectId); 
             updateHeading();
-            renderAllElements(pulseStore.projects);
+            renderFilterCards();
+            renderProjectElements(pulseStore.projects);
         }
         // Delete Project
         else if (getDeleteProjectBtn) { 
             const getProjectId = e.target.closest('.project-action-buttons').querySelector('[data-project-id]').dataset.projectId;
-            setActiveProject("default")
             // To Catch if the Project didn't delete. 
             try { 
                 pulseStore.removeProject(getProjectId);
@@ -63,8 +97,28 @@ function init() {
             }; 
             pulseStore.saveProjects();
             updateHeading();
-            renderAllElements(pulseStore.projects); 
-        }; 
+            renderFilterCards();
+            setActiveProject("default");
+            renderProjectElements(pulseStore.projects); 
+        } 
+        else if (filterBtn) { 
+            if (filterBtn.dataset.filter === "today") { 
+                document.getElementById('task-heading-tag').textContent = "Today"; 
+                enterFilterMode(filterBtn.dataset.filter);
+            }
+            else if (filterBtn.dataset.filter === "upcoming") { 
+                document.getElementById('task-heading-tag').textContent = "Upcoming";
+                enterFilterMode(filterBtn.dataset.filter);
+            }
+            else if (filterBtn.dataset.filter === "anytime") { 
+                document.getElementById('task-heading-tag').textContent = "Anytime";
+                enterFilterMode(filterBtn.dataset.filter);
+            }
+            else if (filterBtn.dataset.filter === "completed") { 
+                document.getElementById('task-heading-tag').textContent = "Completed";
+                enterFilterMode(filterBtn.dataset.filter);
+            }  
+        }       
 
     });
 
@@ -77,7 +131,7 @@ function init() {
 
         // Delete Task
         if (getTaskDeleteBtn) { 
-            const getTaskId = getTaskId.dataset.todoId; 
+            const getTaskId = getTaskIdElement.dataset.todoId; 
 
             // Get Current Project
             const getCurrentProject = pulseStore.findProject(getActiveProject());
@@ -90,7 +144,8 @@ function init() {
             getCurrentProject.removeTask(getTaskId);  
             pulseStore.saveProjects()
 
-            renderTaskElements(getCurrentProject.tasks);
+            render();
+            renderFilterCards();
         }
         // Update Task
         else if (getTaskEditBtn) { 
@@ -126,7 +181,8 @@ function init() {
             const getTask = getCurrentProject.findTask(getTaskId);
             getTask.toggleState(); 
 
-            renderTaskElements(getCurrentProject.tasks); 
+            render();
+            renderFilterCards();
         }; 
 
 
@@ -147,7 +203,7 @@ function init() {
         pulseStore.addProject(newProject); 
         pulseStore.saveProjects();
 
-        renderAllElements(pulseStore.projects);
+        renderProjectElements(pulseStore.projects);
         getCreateProjectForm.reset();
         document.getElementById("create-project-dialog").close(); 
     }); 
@@ -171,7 +227,8 @@ function init() {
         getCurrentProject.addTask(newTask);
         pulseStore.saveProjects();
 
-        renderTaskElements(getCurrentProject.tasks); 
+        render();  
+        renderFilterCards();
         getCreateTaskForm.reset(); 
         document.getElementById('create-task-dialog').close();
     });
@@ -201,7 +258,7 @@ function init() {
         getTask.updateTask(getEditTaskName, getEditTaskNotes, getEditTaskDate, getEditTaskPriority);
         pulseStore.saveProjects();
 
-        renderTaskElements(getCurrentProject.tasks); 
+        render(); 
         document.getElementById('edit-task-dialog').close();
     });
 
@@ -249,4 +306,6 @@ function dialogsEventListeners() {
     });
 };
 
-init()
+init();
+subscribe(render);
+render();  
