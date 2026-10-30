@@ -328,12 +328,12 @@ body {
     text-align: center;
     padding-bottom: 10px;
     color: var(--text-heading);
-    .date { 
+    .week-day { 
         font-size: var(--font-size-sm);
         font-family: var(--font-family-heading);
         margin-bottom: .3em;
     }
-    .time { 
+    .date { 
         font-size: clamp(0.8125rem, 0.8rem + 0.5vw, 1.3rem);
         font-weight: var(--font-weight-bold);
     }
