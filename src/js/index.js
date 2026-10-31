@@ -3,22 +3,19 @@ import { format } from "date-fns";
 import { Task } from "./tasks.js"
 import { Project } from "./projects.js"
 import { Store } from "./storage.js"
-import { updateFilterCards, getFilterTodayTasks, getFilterUpcomingTasks, getFilterAnytimeTasks, getFilterCompletedTasks } from "./filters.js";
-import { renderProjectElements, renderTaskElements } from "./DOMbuilder.js";
+import { getFilterTodayTasks, getFilterUpcomingTasks, getFilterCompletedTasks } from "./filters.js";
+import { renderProjectElements, renderTaskElements, renderFilterCards } from "./DOMbuilder.js";
 import { enterProjectMode, enterFilterMode, subscribe, setActiveProject, getActiveProject, getActiveViewState, getActiveFilterState } from "./appState.js"
 
 const pulseStore = new Store(); // Start Storage 
-const renderFilterCards = () => { 
+
+// Helper Functions to keep the code DRY
+const updateFilterCards = () => { 
     const getCurrentProject = pulseStore.findProject(getActiveProject()); 
-    if (!getCurrentProject) return;
+    if (!getCurrentProject) return; 
     
-    updateFilterCards(getCurrentProject.tasks)
+    renderFilterCards(getCurrentProject.tasks)
 }
-const updateHeading = () => { 
-    const project = pulseStore.findProject(getActiveProject()); 
-    if (!project) return; 
-    document.getElementById('task-heading-tag').textContent = project.title; 
-};
 const updateDate = () => { 
     const getWeekDayElement = document.querySelector('.week-day');
     const getDateElement = document.querySelector('.date'); 
@@ -28,37 +25,54 @@ const updateDate = () => {
 function render() {
     // If Clause for Projects  
     if (getActiveViewState() === "project") {
+        // Include Filter Cards
+        const filterCards = document.querySelectorAll('.filter-card'); 
+        filterCards.forEach(card => card.style.display = 'block'); 
+        updateFilterCards();
+
         const project = pulseStore.findProject(getActiveProject());
 
         if (!project) return; 
+        document.getElementById('view-state-tag').textContent = project.title; 
         renderTaskElements(project.tasks);
     }
     // If Clause for Filters
     else if (getActiveViewState() === "filter") {
-        const projects = pulseStore.projects; 
+        // Do Not Include Filter Cards
+        const filterCards = document.querySelectorAll('.filter-card'); 
+        filterCards.forEach(card => card.style.display = 'none');   
+
+        const tasks = pulseStore.flattenTasks(); 
         const filterState = getActiveFilterState(); 
+        document.getElementById('view-state-tag').textContent = filterState.charAt(0).toUpperCase() + filterState.slice(1); 
+
+        if (filterState === "anytime") { 
+            renderTaskElements(tasks); 
+            return;
+        }
 
         const filterStates = { 
             "today": getFilterTodayTasks, 
             "upcoming": getFilterUpcomingTasks, 
-            "anytime": getFilterAnytimeTasks, 
             "completed": getFilterCompletedTasks,
         };
-        const tasks = filterStates[filterState](projects);
-        renderTaskElements(tasks)
+        const result = filterStates[filterState](tasks);
+        renderTaskElements(result)
     }; 
 };
 
+
+
+// Bootstrap/Initialization for the app 
 function init() {  
 
     // App Start Up 
     pulseStore.loadProjects();
     pulseStore.ensureDefaultProject();
     updateDate();
-    renderFilterCards();
     renderProjectElements(pulseStore.projects); 
-    setActiveProject("default");
-    updateHeading();
+    enterProjectMode("default");
+    render();
 
 
     // Form Elements
@@ -81,8 +95,6 @@ function init() {
         if (getProjectBtn) { 
             const getProjectId = e.target.closest('.project-action-buttons').querySelector('[data-project-id]').dataset.projectId;
             enterProjectMode(getProjectId); 
-            updateHeading();
-            renderFilterCards();
             renderProjectElements(pulseStore.projects);
         }
         // Delete Project
@@ -96,32 +108,28 @@ function init() {
                 return; 
             }; 
             pulseStore.saveProjects();
-            updateHeading();
-            renderFilterCards();
             setActiveProject("default");
             renderProjectElements(pulseStore.projects); 
         } 
+        // Filters 
         else if (filterBtn) { 
-            if (filterBtn.dataset.filter === "today") { 
-                document.getElementById('task-heading-tag').textContent = "Today"; 
+            if (filterBtn.dataset.filter === "today") {  
                 enterFilterMode(filterBtn.dataset.filter);
             }
             else if (filterBtn.dataset.filter === "upcoming") { 
-                document.getElementById('task-heading-tag').textContent = "Upcoming";
                 enterFilterMode(filterBtn.dataset.filter);
             }
             else if (filterBtn.dataset.filter === "anytime") { 
-                document.getElementById('task-heading-tag').textContent = "Anytime";
                 enterFilterMode(filterBtn.dataset.filter);
             }
             else if (filterBtn.dataset.filter === "completed") { 
-                document.getElementById('task-heading-tag').textContent = "Completed";
                 enterFilterMode(filterBtn.dataset.filter);
             }  
         }       
 
     });
 
+    // CRUD Task Event Listener
     getTaskList.addEventListener('click', (e) => { 
 
         const getTaskDeleteBtn = e.target.closest('.delete-btn'); 
@@ -145,7 +153,6 @@ function init() {
             pulseStore.saveProjects()
 
             render();
-            renderFilterCards();
         }
         // Update Task
         else if (getTaskEditBtn) { 
@@ -180,9 +187,9 @@ function init() {
             // Get Task and Toggle Task Status 
             const getTask = getCurrentProject.findTask(getTaskId);
             getTask.toggleState(); 
+            pulseStore.saveProjects();
 
             render();
-            renderFilterCards();
         }; 
 
 
@@ -228,7 +235,6 @@ function init() {
         pulseStore.saveProjects();
 
         render();  
-        renderFilterCards();
         getCreateTaskForm.reset(); 
         document.getElementById('create-task-dialog').close();
     });
@@ -261,7 +267,6 @@ function init() {
         render(); 
         document.getElementById('edit-task-dialog').close();
     });
-
 };
 
 function sidebarEventListeners() { 
@@ -297,7 +302,7 @@ function dialogsEventListeners() {
         if (openBtn) { 
             if (openBtn.dataset.dialog === 'create-task-dialog') { 
                 document.getElementById('task-date').value = format(new Date(), "yyyy-MM-dd")
-            }           
+            }          
             document.getElementById(openBtn.dataset.dialog).showModal(); 
         } else if (closeBtn) { 
             e.preventDefault()
@@ -308,4 +313,3 @@ function dialogsEventListeners() {
 
 init();
 subscribe(render);
-render();  
