@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { Task } from "./tasks.js"
 import { Project } from "./projects.js"
 import { Store } from "./storage.js"
-import { getFilterTodayTasks, getFilterUpcomingTasks, getFilterCompletedTasks } from "./filters.js";
+import { searchTasks, getFilterTodayTasks, getFilterUpcomingTasks, getFilterCompletedTasks } from "./filters.js";
 import { renderProjectElements, renderTaskElements, renderFilterCards } from "./DOMbuilder.js";
 import { enterProjectMode, enterFilterMode, subscribe, setActiveProject, getActiveProject, getActiveViewState, getActiveFilterState } from "./appState.js"
 
@@ -83,6 +83,8 @@ function init() {
     // Elements 
     const getSidebar = document.getElementById("sidebar");   
     const getTaskList = document.getElementById("task-list"); 
+    const searchInput = document.getElementById("task-search"); 
+    const viewStateHeading = document.getElementById("view-state-tag");    
 
 
     // Event Listeners
@@ -129,7 +131,7 @@ function init() {
 
     });
 
-    // CRUD Task Event Listener
+    // Edit, Delete, and Toggle listeners 
     getTaskList.addEventListener('click', (e) => { 
 
         const getTaskDeleteBtn = e.target.closest('.delete-btn'); 
@@ -154,7 +156,7 @@ function init() {
 
             render();
         }
-        // Update Task
+        // Update Task Form Input Values
         else if (getTaskEditBtn) { 
             document.getElementById('edit-todo-id').value = getTaskIdElement.dataset.todoId;
 
@@ -239,7 +241,7 @@ function init() {
         document.getElementById('create-task-dialog').close();
     });
 
-    // Edit Task Form 
+    // Edit Task Listener 
     getEditTaskForm.addEventListener('submit', (e) => { 
         e.preventDefault() 
         // Grab Inputs to set to task values 
@@ -267,6 +269,16 @@ function init() {
         render(); 
         document.getElementById('edit-task-dialog').close();
     });
+
+
+    // Search Input Listener 
+    searchInput.addEventListener('input', (e) => {
+        viewStateHeading.textContent = "Results" 
+        const allTasks = pulseStore.flattenTasks();
+        const searchResults = searchTasks(allTasks, e.target.value); 
+        renderTaskElements(searchResults); 
+    })
+
 };
 
 function sidebarEventListeners() { 
@@ -302,10 +314,18 @@ function dialogsEventListeners() {
         if (openBtn) { 
             if (openBtn.dataset.dialog === 'create-task-dialog') { 
                 document.getElementById('task-date').value = format(new Date(), "yyyy-MM-dd")
-            }          
+            }       
+            else if(openBtn.dataset.dialog === 'search-task-dialog') { 
+                document.getElementById(openBtn.dataset.dialog).show(); 
+                return
+            }    
             document.getElementById(openBtn.dataset.dialog).showModal(); 
         } else if (closeBtn) { 
             e.preventDefault()
+            if (closeBtn.dataset.close === 'search-task-dialog') { 
+                document.getElementById('search-form').reset();
+                render(); 
+            }            
             document.getElementById(closeBtn.dataset.close).close(); 
         }; 
     });
