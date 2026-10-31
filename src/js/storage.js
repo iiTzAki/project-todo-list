@@ -1,5 +1,4 @@
 import { Project } from "./projects.js";
-import { getFilterTodayTasks } from "./filters.js";
 
 export class Store { 
 
@@ -22,6 +21,10 @@ export class Store {
 
     findProject(projectId) {
         return this.#projects.find((project) => project.projectId === projectId);
+    }
+
+    flattenTasks() { 
+        return this.#projects.flatMap((project) => project.tasks); 
     }
 
     loadProjects() { 

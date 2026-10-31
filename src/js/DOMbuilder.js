@@ -20,6 +20,26 @@ function renderTaskElements(tasks) {
     });
 }
 
+function renderFilterCards(tasks) { 
+    const getCurrentDate = format(new Date(), "yyyy-MM-dd"); 
+    
+    // Grab Elements 
+    const getFilterTodayCard = document.querySelector('.filter-card-today');
+    const getFilterPendingCard = document.querySelector('.filter-card-pending');
+    const getFilterCompletedCard = document.querySelector('.filter-card-completed'); 
+
+    // Filters
+    const todayTasksCount = tasks.filter((task) => task.dueDate === getCurrentDate && !task.isComplete).length;
+    const pendingTasksCount = tasks.filter((task) => task.isComplete === false).length;
+    const completedTasksCount = tasks.filter((task) => task.isComplete === true).length;
+
+    // Set Card Counts
+    getFilterTodayCard.textContent = todayTasksCount; 
+    getFilterPendingCard.textContent = pendingTasksCount; 
+    getFilterCompletedCard.textContent = completedTasksCount; 
+
+}; 
+
 function createProjectElement(projectName, projectId) { 
 
     const getMyProjects = document.getElementById('my-projects'); 
@@ -131,5 +151,6 @@ function createTaskElement(taskTitle, taskDueDate, taskPriority, taskStatus, tod
 
 export { 
     renderProjectElements, 
-    renderTaskElements
+    renderTaskElements, 
+    renderFilterCards
 }
